@@ -6,6 +6,10 @@
 /* global THREE */
 
 function main() {
+  var mouseX = 0,
+    mouseY = 0,
+    windowHalfX = window.innerWidth / 2,
+    windowHalfY = window.innerHeight / 2;
   const canvas = document.querySelector("#c");
   const renderer = new THREE.WebGLRenderer({ canvas: canvas });
   // Configure renderer clear color
@@ -72,6 +76,8 @@ function main() {
       gltf.cameras; // Array<THREE.Camera>
       gltf.asset; // Object
 
+      // gltf.rotation.x = 3.14 / 2;
+
       // compute the box that contains all the stuff
       // from root and below
       const box = new THREE.Box3().setFromObject(root);
@@ -106,6 +112,8 @@ function main() {
       camera.aspect = canvas.clientWidth / canvas.clientHeight;
       camera.updateProjectionMatrix();
     }
+
+    // camera.lookAt(scene.position);
 
     renderer.render(scene, camera);
 
