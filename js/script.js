@@ -11,7 +11,11 @@ function main() {
     windowHalfX = window.innerWidth / 2,
     windowHalfY = window.innerHeight / 2;
   const canvas = document.querySelector("#c");
-  const renderer = new THREE.WebGLRenderer({ canvas: canvas });
+  const renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    antialias: true,
+    alpha: true
+  });
   // Configure renderer clear color
   renderer.setClearColor("#0000ff");
 
@@ -29,14 +33,23 @@ function main() {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color("blue");
 
-  // LIGHTS
-  var dirLight = new THREE.DirectionalLight(0xffb6c1, 5.125);
-  dirLight.position.set(0, 0, 1).normalize();
-  scene.add(dirLight);
+  scene.add(new THREE.HemisphereLight(0x111111, 0x444444));
+  //sceneStore.add( new THREE.HemisphereLight( 0x111111, 0x444444 ) );
 
-  var pointLight = new THREE.PointLight(0xffffff, 1.5);
-  pointLight.position.set(50, 100, 90);
-  scene.add(pointLight);
+  var light = new THREE.DirectionalLight(0xfdebff, 1.5);
+  light.position.set(0, 140, 500).multiplyScalar(1.1);
+  //var light2 = new THREE.DirectionalLight( 0xebf3ff, 1.5 );
+  //light2.position.set( 0, 140, 500 ).multiplyScalar( 1.1 );
+  scene.add(light);
+
+  // LIGHTS
+  // var dirLight = new THREE.DirectionalLight(0xffb6c1, 5.125);
+  // dirLight.position.set(0, 0, 1).normalize();
+  // scene.add(dirLight);
+
+  // var pointLight = new THREE.PointLight(0xffffff, 1.5);
+  // pointLight.position.set(50, 100, 90);
+  // scene.add(pointLight);
 
   function frameArea(sizeToFitOnScreen, boxSize, boxCenter, camera) {
     const halfSizeToFitOnScreen = sizeToFitOnScreen * 0.5;
@@ -76,8 +89,6 @@ function main() {
       gltf.cameras; // Array<THREE.Camera>
       gltf.asset; // Object
 
-      // gltf.rotation.x = 3.14 / 2;
-
       // compute the box that contains all the stuff
       // from root and below
       const box = new THREE.Box3().setFromObject(root);
@@ -86,7 +97,7 @@ function main() {
       const boxCenter = box.getCenter(new THREE.Vector3());
 
       // set the camera to frame the box
-      frameArea(boxSize * 1.5, boxSize, boxCenter, camera);
+      frameArea(boxSize * 1, boxSize, boxCenter, camera);
 
       // update the Trackball controls to handle the new size
       controls.maxDistance = boxSize * 10;
