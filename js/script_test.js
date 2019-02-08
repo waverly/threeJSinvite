@@ -782,6 +782,7 @@ function render() {
 
   renderer.render(scene, camera);
 }
+// end render
 
 function killStoreOverlay() {
   showingStore = false;

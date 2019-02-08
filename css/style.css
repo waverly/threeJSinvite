@@ -3,8 +3,70 @@ body {
   margin: 0;
   height: 100vh;
 }
+
+* {
+  box-sizing: border-box;
+}
 #c {
   width: 100vw;
   height: 100vh;
   display: block;
+}
+
+.badges {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  flex-direction: row-reverse;
+}
+
+.left,
+.right {
+  width: 230px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.badges svg {
+  width: 100%;
+}
+
+.badges svg * {
+  fill: white;
+}
+
+.badges .left svg {
+  width: 300px;
+}
+
+@media all and (max-width: 768px) {
+  .badges svg {
+    width: 48%;
+  }
+
+  .right {
+    transform: rotate(-90deg);
+  }
+
+  .left {
+    width: 75%;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    padding-right: 10px;
+    justify-content: flex-end;
+  }
+
+  .right {
+    width: 75%;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    transform-origin: 22% 75%;
+    width: auto;
+  }
 }

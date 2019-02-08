@@ -1,6 +1,3 @@
-// Three.js - Load .GLTF
-// from https://threejsfundamentals.org/threejs/threejs-load-gltf.html
-
 "use strict";
 
 /* global THREE */
@@ -13,11 +10,6 @@ function main() {
   var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   );
-
-  var mouseX = 0,
-    mouseY = 0,
-    windowHalfX = window.innerWidth / 2,
-    windowHalfY = window.innerHeight / 2;
 
   var mouse = {
     position: new THREE.Vector2(),
@@ -50,7 +42,6 @@ function main() {
     antialias: true,
     alpha: true
   });
-  // Configure renderer clear color
   renderer.setClearColor("#0000ff");
   renderer.gammaInput = true;
   renderer.gammaOutput = true;
@@ -63,30 +54,14 @@ function main() {
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
   camera.position.set(0, 10, 100);
 
-  // const controls = new THREE.OrbitControls(camera, canvas);
-  // controls.target.set(0, 5, 0);
-  // controls.update();
-
   const scene = new THREE.Scene();
   scene.background = new THREE.Color("blue");
 
   scene.add(new THREE.HemisphereLight(0x111111, 0x444444));
-  //sceneStore.add( new THREE.HemisphereLight( 0x111111, 0x444444 ) );
 
   var light = new THREE.DirectionalLight(0xfdebff, 1.5);
   light.position.set(0, 140, 500).multiplyScalar(1.1);
-  //var light2 = new THREE.DirectionalLight( 0xebf3ff, 1.5 );
-  //light2.position.set( 0, 140, 500 ).multiplyScalar( 1.1 );
   scene.add(light);
-
-  // LIGHTS
-  // var dirLight = new THREE.DirectionalLight(0xffb6c1, 5.125);
-  // dirLight.position.set(0, 0, 1).normalize();
-  // scene.add(dirLight);
-
-  // var pointLight = new THREE.PointLight(0xffffff, 1.5);
-  // pointLight.position.set(50, 100, 90);
-  // scene.add(pointLight);
 
   function frameArea(sizeToFitOnScreen, boxSize, boxCenter, camera) {
     const halfSizeToFitOnScreen = sizeToFitOnScreen * 0.5;
@@ -137,11 +112,6 @@ function main() {
 
       // set the camera to frame the box
       frameArea(boxSize * 1, boxSize, boxCenter, camera);
-
-      // update the Trackball controls to handle the new size
-      // controls.maxDistance = boxSize * 10;
-      // controls.target.copy(boxCenter);
-      // controls.update();
     });
   }
 
@@ -160,11 +130,17 @@ function main() {
   var yForth = false;
 
   function render() {
+    var deltaRotationQuaternion = new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(toRadians(0.03), toRadians(0.02), 0, "XYZ")
+    );
+
+    targRotation.multiplyQuaternions(deltaRotationQuaternion, targRotation);
+
     mouse.vel.x *= 0.92;
     mouse.vel.y *= 0.92;
 
     if (!mouse.down) {
-      var deltaRotationQuaternion = new THREE.Quaternion().setFromEuler(
+      deltaRotationQuaternion = new THREE.Quaternion().setFromEuler(
         new THREE.Euler(
           toRadians(mouse.vel.y * 0.5),
           toRadians(mouse.vel.x * 0.5),
@@ -210,8 +186,6 @@ function main() {
       camera.updateProjectionMatrix();
     }
 
-    // camera.lookAt(scene.position);
-
     renderer.render(scene, camera);
 
     requestAnimationFrame(render);
@@ -219,9 +193,9 @@ function main() {
 
   /* events */
   if (isMobile) {
-    container1.addEventListener("touchstart", onTouchStart, { passive: false });
-    container1.addEventListener("touchend", onTouchEnd, { passive: false });
-    container1.addEventListener("touchmove", onTouchMove, { passive: false });
+    document.addEventListener("touchstart", onTouchStart, { passive: false });
+    document.addEventListener("touchend", onTouchEnd, { passive: false });
+    document.addEventListener("touchmove", onTouchMove, { passive: false });
   } else {
     document.addEventListener("mousedown", onMouseDown);
     document.addEventListener("mouseup", onMouseUp);
@@ -230,7 +204,6 @@ function main() {
 
   function onMouseDown(e) {
     mouse.down = true;
-    // handle3dInteractions(event.clientX, event.clientY, true);
   }
 
   function onMouseMove(e) {
@@ -258,7 +231,6 @@ function main() {
     }
 
     mouse.normal.x = e.clientX / window.innerWidth;
-    //mouse.normal.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
 
     previousMousePosition = {
       x: e.clientX,
@@ -274,11 +246,8 @@ function main() {
 
     console.log({ deltaMove });
 
-    //console.log(mouse.vel)
-
     mouse.down = false;
     mouse.moved = false;
-    //checkDistanceMoved(e.clientX, e.clientY);
   }
 
   function onTouchStart(e) {
@@ -339,7 +308,6 @@ function main() {
     };
   }
   function onTouchEnd(e) {
-    //checkDistanceMoved();
     e.preventDefault();
 
     mouse.vel.x = deltaMove.x;
